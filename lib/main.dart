@@ -1,11 +1,13 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:kgh_admin/firebase_options.dart';
 import 'package:kgh_admin/routes/app_pages.dart';
 import 'package:kgh_admin/routes/app_routes.dart';
 import 'package:kgh_admin/utils/app_binding.dart';
-import 'package:kgh_admin/routes/routes.dart';
 
-void main() {
+void main() async {
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
 }
 
