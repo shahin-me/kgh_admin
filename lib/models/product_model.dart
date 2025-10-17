@@ -18,6 +18,7 @@ class ProductModel {
   double retailPrice;
   double purchasePrice;
   int stock;
+  int pendingStock;
   String unit;
   String warranty;
   double wholesalePrice;
@@ -41,6 +42,7 @@ class ProductModel {
     required this.retailPrice,
     required this.purchasePrice,
     required this.stock,
+    this.pendingStock = 0,
     required this.unit,
     required this.warranty,
     required this.wholesalePrice,
@@ -68,6 +70,7 @@ class ProductModel {
       retailPrice: (map['retailPrice'] ?? 0).toDouble(),
       purchasePrice: (map['purchasePrice'] ?? 0).toDouble(),
       stock: (map['stock'] ?? 0).toInt(),
+      pendingStock: (map['pendingStock'] ?? 0).toInt(),
       unit: map['unit'] ?? '',
       warranty: map['warranty'] ?? '',
       wholesalePrice: (map['wholesalePrice'] ?? 0).toDouble(),
@@ -93,6 +96,7 @@ class ProductModel {
       'retailPrice': retailPrice,
       'purchasePrice': purchasePrice,
       'stock': stock,
+      'pendingStock': pendingStock,
       'unit': unit,
       'warranty': warranty,
       'wholesalePrice': wholesalePrice,
@@ -106,6 +110,10 @@ class ProductModel {
       purchasePrice > 0 ? ((wholesaleProfit / purchasePrice) * 100) : 0;
   double get retailProfitPercentage =>
       purchasePrice > 0 ? ((retailProfit / purchasePrice) * 100) : 0;
+
+  int get availableStock => stock - pendingStock;
+  bool get hasPendingOrders => pendingStock > 0;
+  bool get isOutOfStock => availableStock <= 0;
 }
 
 // import 'package:cloud_firestore/cloud_firestore.dart';
@@ -126,10 +134,12 @@ class ProductModel {
 //   String productVideo;
 //   Map<String, dynamic> quantityDiscount;
 //   double retailPrice;
+//   double purchasePrice;
 //   int stock;
 //   String unit;
 //   String warranty;
 //   double wholesalePrice;
+//   int replaceCount;
 
 //   ProductModel({
 //     this.id,
@@ -147,13 +157,14 @@ class ProductModel {
 //     required this.productVideo,
 //     required this.quantityDiscount,
 //     required this.retailPrice,
+//     required this.purchasePrice,
 //     required this.stock,
 //     required this.unit,
 //     required this.warranty,
 //     required this.wholesalePrice,
+//     this.replaceCount = 0,
 //   });
 
-//   // Firebase থেকে data পাওয়ার পর map থেকে object create করার method
 //   factory ProductModel.fromMap(Map<String, dynamic> map, String id) {
 //     return ProductModel(
 //       id: id,
@@ -173,14 +184,15 @@ class ProductModel {
 //         map['quantityDiscount'] ?? {},
 //       ),
 //       retailPrice: (map['retailPrice'] ?? 0).toDouble(),
+//       purchasePrice: (map['purchasePrice'] ?? 0).toDouble(),
 //       stock: (map['stock'] ?? 0).toInt(),
 //       unit: map['unit'] ?? '',
 //       warranty: map['warranty'] ?? '',
 //       wholesalePrice: (map['wholesalePrice'] ?? 0).toDouble(),
+//       replaceCount: (map['replaceCount'] ?? 0).toInt(),
 //     );
 //   }
 
-//   // Object কে map এ convert করার method (যদি data save করতে চান)
 //   Map<String, dynamic> toMap() {
 //     return {
 //       'brandName': brandName,
@@ -197,10 +209,19 @@ class ProductModel {
 //       'productVideo': productVideo,
 //       'quantityDiscount': quantityDiscount,
 //       'retailPrice': retailPrice,
+//       'purchasePrice': purchasePrice,
 //       'stock': stock,
 //       'unit': unit,
 //       'warranty': warranty,
 //       'wholesalePrice': wholesalePrice,
+//       'replaceCount': replaceCount,
 //     };
 //   }
+
+//   double get wholesaleProfit => wholesalePrice - purchasePrice;
+//   double get retailProfit => retailPrice - purchasePrice;
+//   double get wholesaleProfitPercentage =>
+//       purchasePrice > 0 ? ((wholesaleProfit / purchasePrice) * 100) : 0;
+//   double get retailProfitPercentage =>
+//       purchasePrice > 0 ? ((retailProfit / purchasePrice) * 100) : 0;
 // }
